@@ -1,26 +1,48 @@
+"use client"
 import MeetingTypeList from '@/components/MeetingTypeList';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const Home = () => {
-  const now = new Date();
+  const [time, setTime] = useState("")
+  const [date, setDate] = useState("")
 
-  const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  const date = (new Intl.DateTimeFormat('en-US', { dateStyle: 'full' })).format(now);
+  function getDateTime() {
+    const now = new Date();
+    setTime(now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
+    setDate((new Intl.DateTimeFormat('en-US', { dateStyle: 'full' })).format(now))
+  }
+
+  useEffect(() => {
+    getDateTime()
+  }, [])
+
+  setInterval(() => {
+    getDateTime()
+  }, 10000);
+
 
   return (
-    <section className="flex size-full flex-col gap-5 text-white">
-      <div className="h-[303px] w-full rounded-[20px] bg-hero bg-cover">
-        <div className="flex h-full flex-col justify-between max-md:px-5 max-md:py-8 lg:p-11">
-          <h2 className="glassmorphism max-w-[273px] rounded py-2 text-center text-base font-normal">
-            Upcoming Meeting at: 12:30 PM
-          </h2>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-4xl font-extrabold lg:text-7xl">{time}</h1>
-            <p className="text-lg font-medium text-sky-1 lg:text-2xl">{date}</p>
+    <section className=' text-xl text-white '>
+
+      <div className='w-full h-full flex flex-col gap-5 flex-wrap'>
+        {/* Home card */}
+        <div className="w-full h-[19rem] relative">
+          <Image
+            src="/images/hero-background.png"
+            width={1000}
+            height={1000}
+            quality={100}
+            alt='hero-bg'
+            className='w-full h-full object-cover object-left rounded-3xl' />
+          <div className=" absolute bottom-9 left-6">
+            <p className='text-5xl font-extrabold lg:text-7xl'>{time}</p>
+            <p className='mt-2 text-lg font-semibold text-slate-300 lg:text-2xl'>{date}</p>
           </div>
         </div>
-      </div>
 
-      <MeetingTypeList />
+        <MeetingTypeList />
+      </div>
     </section>
   );
 };
